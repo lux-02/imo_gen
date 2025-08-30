@@ -1,0 +1,5 @@
+{
+  "name": "Character Emoji Generator",
+  "description": "Upload a character image and generate a consistent set of 16 emoji-style images showing different actions and emotions, powered by Gemini.",
+  "requestFramePermissions": []
+}
