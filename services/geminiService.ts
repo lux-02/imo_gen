@@ -1,4 +1,10 @@
 import { GoogleGenAI, Modality } from "@google/genai";
+import { buildEmojiPrompt } from "../lib/prompt/buildEmojiPrompt";
+import {
+  enhanceImageQuality,
+  detectAndFixBackground,
+} from "../lib/utils/imageProcessor";
+import { Palette, StyleRule } from "../types/image";
 
 // Vite 환경변수 접근 방식으로 수정
 const API_KEY = process.env.VITE_GEMINI_API_KEY;
@@ -15,27 +21,30 @@ if (!API_KEY) {
 
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 
-const basePrompt = `
-You are an expert emoji and sticker designer. Your task is to re-render a character based on a reference image, applying a specific action or emotion while maintaining perfect consistency.
-
-**Style Requirements:**
-- **Output:** A single sticker-like emoji.
-- **Background:** MUST be transparent.
-- **Resolution:** 1024x1024.
-- **Art Style:** Clean, with a bold outline and vivid colors. Match the reference image's style exactly.
-- **Consistency:** The character's hairstyle, face shape, outfit, and color palette MUST be identical to the reference image.
-- **Exclusions:** Do NOT add any text, watermarks, or extra decorative elements not specified in the action.
-
-**Action to Render:**
-`;
-
 // Base64 데이터에서 data: URL 스키마 제거하는 함수
 const cleanBase64Data = (base64String: string): string => {
-  // data:image/png;base64, 형태의 문자열에서 base64 부분만 추출
-  if (base64String.includes(",")) {
-    return base64String.split(",")[1];
+  try {
+    // data:image/png;base64, 형태의 문자열에서 base64 부분만 추출
+    if (base64String.includes(",")) {
+      const base64Data = base64String.split(",")[1];
+
+      // Base64 데이터 크기 검증 (너무 크면 경고)
+      if (base64Data.length > 5000000) {
+        // 5MB 이상
+        console.warn(
+          "Large base64 data detected:",
+          base64Data.length,
+          "characters"
+        );
+      }
+
+      return base64Data;
+    }
+    return base64String;
+  } catch (error) {
+    console.error("Error cleaning base64 data:", error);
+    return base64String;
   }
-  return base64String;
 };
 
 // MIME 타입을 정확하게 매핑하는 함수
@@ -53,7 +62,13 @@ const getMimeType = (fileType: string): string => {
 const generateSingleEmoji = async (
   base64Image: string,
   mimeType: string,
-  actionPrompt: string
+  actionPrompt: string,
+  settings: {
+    imageCategory: string;
+    style: StyleRule | string;
+    palette: Palette;
+    backgroundMode?: "transparent" | "white";
+  }
 ): Promise<string> => {
   try {
     // Base64 데이터 정리
@@ -66,7 +81,14 @@ const generateSingleEmoji = async (
       base64Length: cleanBase64.length,
     });
 
-    const fullPrompt = `${basePrompt}"${actionPrompt}"`;
+    // 프롬프트 빌더를 사용하여 system과 user 프롬프트 생성
+    const { system, user } = buildEmojiPrompt({
+      ...settings,
+      backgroundMode: settings.backgroundMode || "transparent",
+    });
+
+    // 액션별 프롬프트를 user 프롬프트에 추가
+    const finalUserPrompt = `${user}\n\nSpecific action: ${actionPrompt}`;
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-image-preview",
@@ -79,7 +101,7 @@ const generateSingleEmoji = async (
             },
           },
           {
-            text: fullPrompt,
+            text: `System: ${system}\n\nUser: ${finalUserPrompt}`,
           },
         ],
       },
@@ -93,7 +115,26 @@ const generateSingleEmoji = async (
     );
 
     if (imagePart && imagePart.inlineData) {
-      return imagePart.inlineData.data;
+      let processedImage = imagePart.inlineData.data;
+
+      // 이미지 품질 향상 처리
+      try {
+        processedImage = await enhanceImageQuality(processedImage, {
+          sharpen: 0.5, // 기본 선명화
+          upscale: false, // 필요시에만 활성화
+          forcePNG: true, // PNG 강제 변환
+          backgroundMode: settings.backgroundMode || "transparent",
+        });
+
+        // 배경 문제 자동 수정
+        processedImage = detectAndFixBackground(processedImage);
+
+        console.log("Image quality enhancement completed");
+      } catch (enhanceError) {
+        console.warn("Image enhancement failed, using original:", enhanceError);
+      }
+
+      return processedImage;
     } else {
       console.warn(
         "No image part found in response for prompt:",
@@ -147,10 +188,16 @@ export const generateEmojis = async (
   base64Image: string,
   mimeType: string,
   prompts: string[],
-  onProgress: (progress: number) => void
+  onProgress: (progress: number) => void,
+  settings: {
+    imageCategory: string;
+    style: StyleRule | string;
+    palette: Palette;
+    backgroundMode?: "transparent" | "white";
+  }
 ): Promise<string[]> => {
   const allPromises = prompts.map((prompt) =>
-    generateSingleEmoji(base64Image, mimeType, prompt)
+    generateSingleEmoji(base64Image, mimeType, prompt, settings)
   );
 
   const results: string[] = [];
