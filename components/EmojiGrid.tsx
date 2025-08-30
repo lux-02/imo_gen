@@ -10,6 +10,7 @@ interface EmojiGridProps {
     imageCategory: string;
     style: any;
     palette: any;
+    selectedEmojiSet: any;
   };
 }
 
@@ -38,44 +39,48 @@ export const EmojiGrid: React.FC<EmojiGridProps> = ({ emojis, settings }) => {
                 ? "custom"
                 : createSlug(settings.style.name);
             const paletteSlug = createSlug(settings.palette.name);
-            fileName = `${categorySlug}_${styleSlug}_${paletteSlug}_v${
+            const emojiSetSlug = createSlug(settings.selectedEmojiSet.name);
+            fileName = `${categorySlug}_${styleSlug}_${paletteSlug}_${emojiSetSlug}_v${
               index + 1
             }.${extension}`;
           } else {
-            // 기존 방식 (fallback) - 32개에 맞게 수정
+            // 기존 방식 (fallback) - 35개 한국어 이모티콘에 맞게 수정
             const emotionNames = [
-              "happy",
-              "love",
-              "surprised",
-              "crying",
-              "angry",
-              "winking",
-              "laughing",
-              "sad",
-              "neutral",
-              "sleeping",
-              "cheering",
-              "waving",
-              "ok",
-              "no",
-              "facepalm",
-              "fingerheart",
-              "coffee",
-              "gaming",
-              "working",
-              "selfie",
-              "dancing",
-              "celebrating",
-              "rain",
-              "gift",
-              "kiss",
-              "rofl",
-              "clapping",
-              "shy",
-              "tired",
-              "surrender",
-              "pompons",
-              "thumbsdown",
+              "럭키",
+              "귀찮아",
+              "쁘이",
+              "맛있어",
+              "으앙",
+              "드르렁",
+              "행복해",
+              "슬퍼",
+              "짱",
+              "하트",
+              "힝",
+              "축하해",
+              "웃겨",
+              "머쓱",
+              "눈물나",
+              "부들부들",
+              "우와",
+              "화나",
+              "헤헤",
+              "몰랐어",
+              "끄읕",
+              "다녀올게",
+              "주목",
+              "수고했어",
+              "안녕",
+              "고마워",
+              "잘부탁드립니다",
+              "기웃기웃",
+              "돈없어",
+              "실망",
+              "열공",
+              "열일",
+              "찰칵",
+              "짜잔",
+              "꼬르륵",
             ];
             fileName = `${
               emotionNames[index] || `emoji_${index + 1}`

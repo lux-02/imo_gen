@@ -43,51 +43,114 @@ export const KAKAO_EXTRA8 = [
   "Giving a thumbs down with a disappointed face", // 부정/싫어
 ];
 
-export const KOREAN_TEXT_EMOJIS = [
-  "Character smiling brightly, holding up both thumbs, with the bold Korean word '럭키' written above in comic-style font.",
-  "Character lying down lazily with half-closed eyes, next to the handwritten Korean text '귀찮아'.",
-  "Character making a playful peace sign gesture with cheek puffed, with the cute handwritten word '쁘이' floating beside.",
-  "Character eating happily with sparkling eyes, tongue slightly out, with the text '맛있어' in bold comic font.",
-  "Character crying loudly with big tears streaming down, while the big handwritten Korean text '으앙' appears above.",
-  "Character sleeping with a bubble from nose and 'Z' symbols, with the large Korean text '드르렁' in cartoon font.",
-  "Character smiling with sparkling aura and two hands together, with pink text '행복해' above the head.",
-  "Character looking down with teardrop eyes, next to the sad text '슬퍼' written in soft blue font.",
-  "Character making a strong pose with fist pump, with big bold text '짱' in comic font style.",
-  "Character making a heart sign with hands, with glowing text '하트' above.",
-  "Character shyly blushing and covering cheeks with hands, with tiny text '힝' floating nearby.",
-  "Character throwing confetti with a party popper, with big celebratory text '축하해'.",
-  "Character laughing with closed eyes and open mouth, rolling with joy, and text '웃겨' in big wavy font.",
-  "Character scratching back of head in embarrassment, with small shy text '머쓱'.",
-  "Character crying with glistening eyes, with handwritten bold text '눈물나'.",
-  "Character trembling with clenched fists, with jagged red text '부들부들'.",
-  "Character amazed, wide-eyed, sparkles around, with the exclamation '우와' above.",
-  "Character angry with puffed cheeks and steam, with flame-styled text '화나'.",
-  "Character smirking shyly, scratching cheek, with small text '헤헤'.",
-  "Character surprised, with hand on mouth, and the text '몰랐어' popping above head.",
-  "Character dramatically waving goodbye with both hands, with the big text '끄읕'.",
-  "Character putting on shoes, waving hand, with text '다녀올게'.",
-  "Character pointing upward energetically, with the floating word '주목'.",
-  "Character bowing politely with a smile, with neat text '수고했어'.",
-  "Character waving hello, with big friendly text '안녕'.",
-  "Character bowing deeply with a warm smile, with formal text '고마워'.",
-  "Character smiling with both hands joined politely, with text '잘부탁드립니다'.",
-  "Character peeking curiously from behind a wall, with small text '기웃기웃'.",
-  "Character with empty pockets turned inside out, with droopy face, and text '돈없어'.",
-  "Character frowning with crossed arms, with bold disappointed text '실망'.",
-  "Character sitting at a desk with a book, sweating, with text '열공'.",
-  "Character typing on a laptop with coffee, with text '열일'.",
-  "Character holding up a phone and taking a selfie, with camera flash and text '찰칵'.",
-  "Character revealing something dramatically, with spark effects and text '짜잔'.",
-  "Character holding stomach with droopy eyes, with bubble text '꼬르륵'.",
+export const KOREAN_TEXT_EMOJIS: string[] = [
+  // 1
+  "Cheerful pose with both thumbs up. Add Korean text EXACTLY: '럭키'. Repeat: '럭키'. Place above head, bold Hangul with black outline + white fill. Do not translate or alter spelling. No extra letters.",
+  // 2
+  "Lazy, half-closed eyes. ",
+  // 3
+  "Playful peace sign with cheek puff. Add Korean text EXACTLY: '쁘이'. Repeat: '쁘이'. Place near hand, bold Hangul, black outline + white fill. No Latin letters.",
+  // 4
+  "Happy eating expression, tongue slightly out. Add a speech bubble containing EXACT text: '츄릅'. Repeat inside bubble: '츄릅'. Bold Hangul, high legibility. Do not translate.",
+  // 5
+  "Crying loudly with big tears. Add Korean text EXACTLY: '으앙'. Repeat: '으앙'. Place above head, bold Hangul, black outline + white fill. No other text.",
+  // 6
+  "Sleeping with nose bubble and Zs. ",
+  // 7
+  "Smiling with sparkles, hands together. Add Korean text EXACTLY: '해삐'. Repeat: '해삐'. Place above head, bold Hangul, black outline + pinkish fill.",
+  // 8
+  "Droopy sad eyes. Add Korean text EXACTLY: '힝'. Repeat: '힝'. Place above head, bold Hangul, black outline + light blue fill.",
+  // 9
+  "Strong fist-pump pose. Add Korean text EXACTLY: 'Good'. Repeat: 'Good'. Place above head, thick Hangul, black outline + golden fill.",
+  // 10
+  "Hands making a heart. Add Korean text EXACTLY: '하트'. Repeat: '하트'. Place above head, bold Hangul, black outline + pink fill.",
+  // 11
+  "Shy blush, hands on cheeks. Add Korean text EXACTLY: '힝'. Repeat: '힝'. Place near head, bold Hangul, black outline + white fill.",
+  // 12
+  "Confetti and party popper. Add Korean text EXACTLY: '축하'. Repeat: '축하'. Place above head, bold Hangul, black outline + gold fill.",
+  // 13
+  "Laughing hard, eyes closed. Add Korean text EXACTLY: 'ㅋㅋ'. Repeat: 'ㅋㅋ'. Place above head, bold Hangul, black outline + white fill.",
+  // 14
+  "Scratching back of head, embarrassed.",
+  // 15
+  "Tearful eyes starting to well.",
+  // 16
+  "Trembling with clenched fists. Add Korean text EXACTLY: '화나'. Repeat: '화나'. Place above head, jagged bold Hangul, black outline + red/orange fill.",
+  // 17
+  "Wide-eyed amazement with sparkles. Add Korean text EXACTLY: '우와'. Repeat: '우와'. Place above head, bold Hangul.",
+  // 18
+  "Angry with steam puffs. Add Korean text EXACTLY: '화나'. Repeat: '화나'. Place above head, bold Hangul, black outline + flame-like fill.",
+  // 19
+  "Shy smirk, scratching cheek. Add Korean text EXACTLY: 'ㅎㅎ'. Repeat: 'ㅎㅎ'. Place near head, bold Hangul.",
+  // 20
+  "Surprised, hand on mouth.",
+  // 21
+  "Dramatic farewell wave. Add Korean text EXACTLY: 'END'. Repeat: 'END'. Place above head, bold Hangul, solid black fill with white stroke.",
+  // 22
+  "Putting on shoes, waving. Add Korean text EXACTLY: '다녀올게'. Repeat: '다녀올게'. Place above head, bold Hangul.",
+  // 23
+  "Pointing upward energetically. Add Korean text EXACTLY: '주목'. Repeat: '주목'. Place above head, bold Hangul.",
+  // 24
+  "Polite bow with smile.",
+  // 25
+  "Waving hello. Add Korean text EXACTLY: '안녕'. Repeat: '안녕'. Place above head, bold Hangul.",
+  // 26
+  "Deep polite bow with warm smile. Add a speech bubble containing EXACT text: '고마워'. Repeat inside bubble: '고마워'. Bold Hangul, high legibility.",
+  // 27
+  "Polite request pose (hands together).",
+  // 28
+  "Peeking from behind a wall.",
+  // 29
+  "Empty pockets turned inside out, droopy face. Add a speech bubble containing EXACT text: 'NO MONEY'. Repeat inside bubble: 'NO MONEY'. Bold Hangul.",
+  // 30
+  "Arms crossed with disappointed face. Add Korean text EXACTLY: '시러'. Repeat: '시러'. Place above head, bold Hangul.",
+  // 31
+  "Studying hard at desk with sweat.",
+  // 32
+  "Working hard on laptop with coffee. ",
+  // 33
+  "Taking a selfie with phone flash. ",
+  // 34
+  "Revealing something with spark effects. Add Korean text EXACTLY: '짠'. Repeat: '짠'. Place above head, bold Hangul.",
+  // 35
+  "Holding stomach, hungry expression. Add a speech bubble containing EXACT text: '배고파'. Repeat inside bubble: '배고파'. Bold Hangul.",
 ];
 
 export const EMOJI_SET_16 = [...CORE8, ...EXT8];
 export const EMOJI_SET_24 = [...CORE8, ...EXT8, ...EXTRA8];
 export const EMOJI_SET_32 = [...CORE8, ...EXT8, ...EXTRA8, ...KAKAO_EXTRA8];
-export const EMOJI_SET_32_KOREAN = [
-  ...CORE8,
-  ...EXT8,
-  ...EXTRA8,
-  ...KAKAO_EXTRA8,
-  ...KOREAN_TEXT_EMOJIS,
-];
+export const EMOJI_SET_32_KOREAN = [...KOREAN_TEXT_EMOJIS];
+
+// 사용 가능한 이모티콘 세트 옵션들
+export const EMOJI_SET_OPTIONS = [
+  {
+    id: "emoji_16",
+    name: "Basic Set (16개)",
+    description: "기본 감정과 상황 표현",
+    count: 16,
+    set: EMOJI_SET_16,
+  },
+  {
+    id: "emoji_24",
+    name: "Extended Set (24개)",
+    description: "기본 + 추가 상황 표현",
+    count: 24,
+    set: EMOJI_SET_24,
+  },
+  {
+    id: "emoji_32",
+    name: "Full Set (32개)",
+    description: "모든 기본 + 카카오톡 스타일",
+    count: 32,
+    set: EMOJI_SET_32,
+  },
+  {
+    id: "emoji_32_korean",
+    name: "Korean Set (35개)",
+    description: "한국어 텍스트가 포함된 이모티콘",
+    count: 35,
+    set: EMOJI_SET_32_KOREAN,
+  },
+] as const;
+
+export type EmojiSetOption = (typeof EMOJI_SET_OPTIONS)[number];

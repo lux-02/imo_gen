@@ -15,6 +15,10 @@ interface ReferenceImage {
     style: StyleRule | string;
     palette: Palette;
     backgroundMode: "transparent" | "white";
+    selectedEmojiSet: {
+      name: string;
+      set: string[];
+    };
   };
 }
 
@@ -35,6 +39,10 @@ const App: React.FC = () => {
       style: StyleRule | string;
       palette: Palette;
       backgroundMode: "transparent" | "white";
+      selectedEmojiSet: {
+        name: string;
+        set: string[];
+      };
     }
   ) => {
     setReferenceImage({ file, base64, settings });
@@ -58,7 +66,7 @@ const App: React.FC = () => {
       const results = await generateEmojis(
         referenceImage.base64,
         referenceImage.file.type,
-        EMOJI_PROMPTS,
+        referenceImage.settings.selectedEmojiSet.set, // 선택된 세트 사용
         (p) => setProgress(p),
         referenceImage.settings
       );
@@ -143,7 +151,17 @@ const App: React.FC = () => {
                       disabled={isLoading}
                       className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-colors disabled:bg-slate-600 disabled:cursor-not-allowed"
                     >
-                      {isLoading ? "Generating..." : "Generate 32 Emojis"}
+                      {isLoading
+                        ? "Generating..."
+                        : `Generate ${
+                            referenceImage.settings.selectedEmojiSet.set.length
+                          } ${
+                            referenceImage.settings.selectedEmojiSet.name.includes(
+                              "Korean"
+                            )
+                              ? "Korean "
+                              : ""
+                          }Emojis`}
                     </button>
                     <button
                       onClick={handleClear}
@@ -162,7 +180,14 @@ const App: React.FC = () => {
             <div className="text-center">
               <Loader />
               <p className="text-lg text-cyan-400 mt-4">
-                Generating your 32 emoji set...
+                Generating your{" "}
+                {referenceImage.settings.selectedEmojiSet.set.length}{" "}
+                {referenceImage.settings.selectedEmojiSet.name.includes(
+                  "Korean"
+                )
+                  ? "Korean "
+                  : ""}
+                emoji set...
               </p>
               <p className="text-slate-400">
                 This may take a minute or two. Please be patient.
@@ -190,7 +215,13 @@ const App: React.FC = () => {
           {generatedEmojis.length > 0 && !isLoading && (
             <div>
               <h2 className="text-2xl font-bold text-center mb-6 text-cyan-400">
-                Your 32 Emoji Set
+                Your {referenceImage.settings.selectedEmojiSet.set.length}{" "}
+                {referenceImage.settings.selectedEmojiSet.name.includes(
+                  "Korean"
+                )
+                  ? "Korean "
+                  : ""}
+                Emoji Set
               </h2>
               <EmojiGrid
                 emojis={generatedEmojis}

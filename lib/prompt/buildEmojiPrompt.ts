@@ -1,6 +1,6 @@
 // buildEmojiPrompt.ts
 import { Palette, StyleRule } from "../../types/image";
-import { EMOJI_SET_32 } from "@/config/emoji-sets";
+import { EMOJI_SET_32_KOREAN } from "@/config/emoji-sets";
 
 type BackgroundMode = "transparent" | "white";
 
@@ -60,14 +60,20 @@ export function buildEmojiPrompt(params: {
   style: StyleRule | string; // preset or custom
   palette: Palette;
   backgroundMode?: BackgroundMode;
+  selectedEmojiSet?: any; // EmojiSetSelection 타입
 }) {
   const {
     imageCategory,
     style,
     palette,
     backgroundMode = "transparent",
+    selectedEmojiSet,
   } = params;
   const styleText = typeof style === "string" ? style : style.rule;
+
+  // 선택된 이모티콘 세트 사용 (기본값은 EMOJI_SET_32_KOREAN)
+  const emojiSet = selectedEmojiSet?.set || EMOJI_SET_32_KOREAN;
+  const emojiCount = emojiSet.length;
 
   const styleConstraint =
     typeof style === "string" && style === "Default"
@@ -89,23 +95,30 @@ export function buildEmojiPrompt(params: {
     "- Quality priority: sharpness and clarity over artistic effects.",
   ].join("\n");
 
-  const variations = EMOJI_SET_32.map((v, i) => `${i + 1}) ${v}`).join("\n");
+  const variations = emojiSet.map((v, i) => `${i + 1}) ${v}`).join("\n");
 
   const user = [
     "Reference image: <uploaded_image>",
-    "Generate 32 high-quality PNGs following the constraints above.",
+    `Generate ${emojiCount} high-quality PNGs following the constraints above.`,
     "Keep the same outfit silhouette, hair length, and base colors.",
     "Ensure consistent line thickness, lighting, and shading per the locked style.",
     "Focus on maximum sharpness and clarity - avoid any blur or noise.",
+    selectedEmojiSet?.name.includes("Korean")
+      ? "Each emoji should include the Korean text as specified in the prompt."
+      : "",
     "",
-    "Variations to render (32 total):",
+    `Variations to render (${emojiCount} total):`,
     variations,
     "",
     "File names:",
     `${slug(imageCategory)}_${slug(
       typeof style === "string" ? "custom" : style.name
-    )}_${slug(palette.name)}_v{index}.png`,
-  ].join("\n");
+    )}_${slug(palette.name)}_${slug(
+      selectedEmojiSet?.name || "korean"
+    )}_v{index}.png`,
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   return { system, user };
 }

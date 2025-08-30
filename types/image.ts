@@ -23,3 +23,11 @@ export type CustomPalette = {
 };
 
 export type CustomStyle = string;
+
+export type EmojiSetSelection = {
+  id: string;
+  name: string;
+  description: string;
+  count: number;
+  set: string[];
+};

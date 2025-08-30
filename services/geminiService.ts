@@ -85,6 +85,7 @@ const generateSingleEmoji = async (
     const { system, user } = buildEmojiPrompt({
       ...settings,
       backgroundMode: settings.backgroundMode || "transparent",
+      selectedEmojiSet: settings.selectedEmojiSet,
     });
 
     // 액션별 프롬프트를 user 프롬프트에 추가

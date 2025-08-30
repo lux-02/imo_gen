@@ -7,7 +7,14 @@ import {
   STYLE_PRESETS,
   IMAGE_CATEGORIES,
 } from "../config/presets";
-import { Palette, StyleRule, CustomPalette, CustomStyle } from "../types/image";
+import { EMOJI_SET_OPTIONS } from "../config/emoji-sets";
+import {
+  Palette,
+  StyleRule,
+  CustomPalette,
+  CustomStyle,
+  EmojiSetSelection,
+} from "../types/image";
 import { isValidHex } from "../lib/utils/validation";
 
 interface ImageUploaderProps {
@@ -19,6 +26,7 @@ interface ImageUploaderProps {
       style: StyleRule | CustomStyle;
       palette: Palette;
       backgroundMode: "transparent" | "white";
+      selectedEmojiSet: EmojiSetSelection;
     }
   ) => void;
 }
@@ -45,6 +53,9 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   );
   const [backgroundMode, setBackgroundMode] = useState<"transparent" | "white">(
     "transparent"
+  );
+  const [selectedEmojiSet, setSelectedEmojiSet] = useState<EmojiSetSelection>(
+    EMOJI_SET_OPTIONS[3] // 기본값으로 한국어 세트 (35개)
   );
   const [customStyle, setCustomStyle] = useState<string>("");
   const [customPalette, setCustomPalette] = useState<CustomPalette>({
@@ -86,6 +97,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           palette:
             selectedPalette === "custom" ? customPalette : selectedPalette,
           backgroundMode,
+          selectedEmojiSet,
         };
 
         onImageUpload(file, base64, settings);
@@ -101,6 +113,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
       customStyle,
       customPalette,
       backgroundMode,
+      selectedEmojiSet,
     ]
   );
 
@@ -164,8 +177,8 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           Style & Color Settings
         </h3>
         <p className="text-slate-400 text-sm mb-4">
-          Configure your settings to generate 32 high-quality emojis based on
-          your reference image.
+          Configure your settings to generate {selectedEmojiSet.count}{" "}
+          high-quality emojis based on your reference image.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -204,6 +217,34 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
             </select>
           </div>
 
+          {/* Emoji Set Selection */}
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              Emoji Set
+            </label>
+            <select
+              value={selectedEmojiSet.id}
+              onChange={(e) => {
+                const selected = EMOJI_SET_OPTIONS.find(
+                  (option) => option.id === e.target.value
+                );
+                if (selected) setSelectedEmojiSet(selected);
+              }}
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-slate-200 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+            >
+              {EMOJI_SET_OPTIONS.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-slate-400 mt-1">
+              {selectedEmojiSet.description}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {/* Style Preset */}
           <PresetSelector
             label="Art Style"
@@ -221,9 +262,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
               />
             )}
           />
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {/* Color Preset */}
           <PresetSelector
             label="Color Palette"
@@ -280,6 +319,10 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
             <span className="text-xs text-slate-400">
               Background:{" "}
               <span className="text-cyan-400">{backgroundMode}</span>
+            </span>
+            <span className="text-xs text-slate-400">
+              Emoji Set:{" "}
+              <span className="text-cyan-400">{selectedEmojiSet.name}</span>
             </span>
             <span className="text-xs text-slate-400">
               Style:{" "}
